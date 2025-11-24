@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Trending Today — Casino Bonuses</title>
+  <meta name="description" content="Trending casino bonuses today — updated, reviewed, and ranked.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <h1>Trending Today</h1>
+    <p class="subtitle">Hot casino bonuses & top picks — updated daily</p>
+  </header>
+
+  <main class="container">
+    <section id="trending-list" class="trending-list">
+      <!-- cards injected by JS -->
+    </section>
+
+    <aside class="aside">
+      <div class="widget">
+        <h3>Why Trending?</h3>
+        <p>We rank casinos based on bonus value, rating and how many visitors click today.</p>
+      </div>
+
+      <div class="widget">
+        <h3>Quick Spin (non-gambling)</h3>
+        <button id="spinBtn" class="btn-primary">Spin & Reveal Bonus</button>
+        <p id="spinResult" class="muted"></p>
+      </div>
+    </aside>
+  </main>
+
+  <footer class="site-footer">
+    <small>Disclaimer: We are an affiliate promoter. We do not host gambling. Play responsibly.</small>
+  </footer>
+
+<script>
+/* Load casinos from casinos.json and render */
+async function loadCasinos(){
+  const res = await fetch('casinos.json');
+  const casinos = await res.json();
+
+  // scoring: bonus_value*0.6 + rating*100*0.2 + clicks*0.2
+  function score(c){
+    const bonus = Number(c.bonus_value || 0);
+    const rating = Number(c.rating || 0);
+    const clicks = Number(c.clicks || 0);
+    return (bonus*0.6) + (rating*100*0.2) + (clicks*0.2);
+  }
+
+  casinos.sort((a,b) => score(b) - score(a));
+
+  const container = document.getElementById('trending-list');
+  container.innerHTML = '';
+  casinos.forEach(c => {
+    const card = document.createElement('article');
+    card.className = 'card';
+    card.innerHTML = `
+      <div class="left">
+        <img src="${c.logo}" alt="${escapeHtml(c.name)}" class="logo">
+      </div>
+      <div class="right">
+        <h2>${escapeHtml(c.name)} <span class="rating">★ ${Number(c.rating).toFixed(1)}</span></h2>
+        <p class="tagline">${escapeHtml(c.tagline)}</p>
+        <p class="bonus">${escapeHtml(c.bonus_text)}</p>
+        <div class="meta">
+          <span class="score">Trending score: ${Math.round(score(c))}</span>
+          <span class="clicks">Clicks: ${Number(c.clicks)}</span>
+        </div>
+        <div class="actions">
+          <a class="btn-primary" href="${c.affiliate}" target="_blank" rel="noopener noreferrer">PLAY NOW</a>
+          <a class="btn-secondary" href="review.html?id=${encodeURIComponent(c.id)}">Read Review</a>
+        </div>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function escapeHtml(s){
+  if (!s) return '';
+  return s.replace(/[&<>"']/g, function(m){ return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]; });
+}
+
+document.getElementById('spinBtn').addEventListener('click', function(){
+  const deals = [
+    "Extra 10 Spins on first deposit",
+    "No wagering on first spin",
+    "GCash deposit bonus available",
+    "Deposit match + free spins"
+  ];
+  const pick = deals[Math.floor(Math.random()*deals.length)];
+  document.getElementById('spinResult').innerText = pick;
+});
+
+/* init */
+loadCasinos().catch(err => {
+  document.getElementById('trending-list').innerHTML = '<p class="muted">Failed to load data.</p>';
+  console.error(err);
+});
+</script>
+</body>
+</html>
