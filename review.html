@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Casino Review</title>
+  <meta name="description" content="Casino review">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a href="index.html" class="back">← Back</a>
+  <main class="container" id="review-root">
+    <!-- review content injected here -->
+  </main>
+
+<script>
+async function showReview(){
+  const params = new URLSearchParams(location.search);
+  const id = params.get('id');
+  const res = await fetch('casinos.json');
+  const casinos = await res.json();
+  const casino = casinos.find(c => c.id === id) || casinos[0];
+  const root = document.getElementById('review-root');
+  root.innerHTML = `
+    <section class="review">
+      <img src="${casino.logo}" class="logo-large" alt="${escapeHtml(casino.name)}">
+      <h1>${escapeHtml(casino.name)}</h1>
+      <p class="tagline">${escapeHtml(casino.tagline)}</p>
+      <p><strong>Bonus:</strong> ${escapeHtml(casino.bonus_text)}</p>
+      <p><strong>Rating:</strong> ${Number(casino.rating).toFixed(1)} / 5</p>
+      <p class="muted">Short review: This casino accepts local payments and offers quick withdrawals. Replace this with your unique review text to improve SEO and conversions.</p>
+      <a class="btn-primary" href="${casino.affiliate}" target="_blank" rel="noopener noreferrer">Grab Bonus</a>
+    </section>
+  `;
+}
+
+function escapeHtml(s){
+  if (!s) return '';
+  return s.replace(/[&<>"']/g, function(m){ return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]; });
+}
+
+showReview().catch(err => {
+  console.error(err);
+  document.getElementById('review-root').innerHTML = '<p class="muted">Could not load review.</p>';
+});
+</script>
+</body>
+</html>
