@@ -1,0 +1,38 @@
+[
+  {
+    "id": "casino1",
+    "name": "Your Affiliate Casino",
+    "tagline": "Hot Bonus — Check it now",
+    "bonus_value": 10000,
+    "bonus_text": "Sign-up bonus + free spins",
+    "affiliate": "http://053696.id888f.com/?referralCode=qqp2857",
+    "logo": "assets/default-logo.png",
+    "rating": 4.5,
+    "clicks": 0,
+    "last_updated": "2025-11-24"
+  },
+  {
+    "id": "casino2",
+    "name": "SpinToday (placeholder)",
+    "tagline": "50% Match + Free Spins",
+    "bonus_value": 5000,
+    "bonus_text": "50% match up to ₱5,000",
+    "affiliate": "https://example.com/affiliate-placeholder",
+    "logo": "assets/default-logo.png",
+    "rating": 4.2,
+    "clicks": 0,
+    "last_updated": "2025-11-24"
+  },
+  {
+    "id": "casino3",
+    "name": "LuckySpin (placeholder)",
+    "tagline": "100% Welcome Bonus",
+    "bonus_value": 3000,
+    "bonus_text": "100% deposit match + spins",
+    "affiliate": "https://example.com/affiliate-placeholder2",
+    "logo": "assets/default-logo.png",
+    "rating": 4.0,
+    "clicks": 0,
+    "last_updated": "2025-11-24"
+  }
+]
